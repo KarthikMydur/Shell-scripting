@@ -1,5 +1,6 @@
 # Below script can be used to create a users
 
+
 # Make sure the script is being executed with the superuser privileges.
 USERID=$(id -u)
 echo "${USERID}"
