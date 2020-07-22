@@ -1,31 +1,28 @@
 #!/bin/bash
 
-# This script generate random list of passwords
+#This script generates a random password for each user specified on command line
 
-# A random number as a password
-PASSWORD="${RANDOM}"
-echo "${PASSWORD}"
+#Display what user types on command line.
+echo "You executed this command ${0}"
 
-# Three random numbers together
-PASSWORD="${RANDOM}${RANDOM}${RANDOM}"
-echo "$PASSWORD"
+# Display the path and file name of the script.
+echo "You used $(dirname ${0}) as path to the $(basename ${0}) script"
 
-# Use the current date/time as perfect base for the password
-PASSWORD=$(date +%s)
-echo "${PASSWORD}"
+# Tell user how many arguments are passed
+NUMBER_OF_PARAMETERS="${#}"
+echo "You suppied ${NUMBER_OF_PARAMETERS} to the command line."
 
-# Use nano seconds to the password
-PASSWORD=$(date +%s%N)
-echo "${PASSWORD}"
+# Make sure they atleast supply one argument.
+if [[ "${NUMBER_OF_PARAMETERS}" -lt 1 ]]
+then
+        echo "Usage: ${0} USER_NAME [USER_NAME]...."
+        exit 1
+fi
 
-# A better password
-PASSWORD=$(date +%s%N | sha256sum | head -c32)
-echo "${PASSWORD}"
+# Generate and display a password for each user
+for USER_NAME in "${@}"
+do
+        PASSWORD=$(date +%s%N | sha256sum | head -c48)
+        echo "${USER_NAME}: ${PASSWORD}"
+done
 
-# Even better passoword
-PASSWORD=$(date +%s%N${RANDOM}${RANDOM} | sha256sum | head -c48)
-echo "${PASSWORD}"
-
-# Adding special character to the password
-SPECIAL_CHARACTER=$(echo '!@#$%^&*()_-+=' | fold -w1 | shuf | head -c1)
-echo "${PASSWORD}${SPECIAL_CHARACTER}"
